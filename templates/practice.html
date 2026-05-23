@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>login</title>
+
+        <style>
+            *{
+                margin: 0;
+             padding: 0;
+             box-sizing:border-box;
+            }
+
+            body {
+                font-family: arial;
+                background: #f2f2f2;
+                justify-items: center;
+                justify-content: center;
+            }
+
+        .container {
+            width: 400px;
+            margin: 200px;
+            padding: 30px;
+            background: gray;
+            border-radius: 20px;
+            box-shadow: 0 0 35px yellow;
+            text-align: center;
+         }
+
+         input {
+            width: 90%;
+            padding: 8px;
+            margin: 10px 0;
+            background-color:silver;
+
+         }
+         
+         button {
+            padding: 10px;
+            background: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+         }
+
+         .message {
+            color: gray;
+         }
+
+
+    
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <h2>sign in</h2>
+            <!--message-->
+            {% if message %}
+            <p style="color: green; font-weight: bold;">{{ message }}</p>
+            {% endif %}
+
+<form action="/login" method="POST">
+    <input type="text" name="username" placeholder="ENTER USER NAME">
+    <input type="password" name="password" placeholder="ENTER UR password">
+    <button type="submit">login</button>
+    <button type="reset">reset</button>
+</form>
+<br><br>
+<a href="/register">CREATE ACCOUNT</a>
+
+        </div>
+    </body>
+</html>

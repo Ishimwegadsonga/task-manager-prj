@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>users</title>
+
+    </head>
+    </body>
+
+  <u><h2 style="text-align: center; color: red;">DATABASE USERS</h2></u>
+    <table border="1" style="width: 230px;" align="center" col>
+        <tr>
+            <th>id</th>
+            <th>username</th>
+        </tr>
+
+        {% for user in users %}
+
+        <tr>
+         <td>{{ user[0] }}</td>
+         <td>{{ user[1] }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+    <body>
+</html>
