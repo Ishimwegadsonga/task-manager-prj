@@ -10,19 +10,7 @@ app.secret_key = "mysecretkey123"
 def init_db():
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
-    try:
-        cursor.execute(
-            "ALTER TABLE tasks ADD COLUMN priority TEXT"
-        )
-    except:
-        pass
-    
-    try:
-        cursor.execute(
-            "ALTER TABLE tasks ADD COLUMN due_date TEXT"
-        )
-    except:
-        pass
+
 
 
 #====== users table =============
@@ -43,10 +31,12 @@ def init_db():
         user_id INTEGER,
         title TEXT,
         status TEXT,
-        due_date TEXT
+        due_date TEXT,
+        priority  TEXT
            ) 
 
-        ''')   
+        ''')  
+ 
     conn.commit()
     conn.close()
 
