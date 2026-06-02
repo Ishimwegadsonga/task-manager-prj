@@ -212,6 +212,8 @@ def dashboard():
     else:
         progress = 0
 
+    current_date = datetime.now().strftime("%Y-%m-%d")   
+
     conn.close()
 
 
@@ -222,7 +224,8 @@ def dashboard():
         total_tasks=total_tasks,
         completed_tasks=completed_tasks,
         pending_tasks=pending_tasks,
-        progress=progress
+        progress=progress,
+        current_date=current_date
     )
 
     #=====  add tasks  =====

@@ -37,6 +37,10 @@
         box-shadow: 0 10px 25px rgba(0,0,0,0.12);
        }
 
+       .border_danger{
+         border: 3px solid #dc3545 !important;
+       }
+
        .stats-card{
         padding: 25px;
         border-radius: 20px;
@@ -103,6 +107,7 @@
       .dark-mode .text-muted{
         color: #d1d1d1 !important;
       }
+      
 
     /* MOBILE RESPONSIVE */
 
@@ -356,7 +361,13 @@
             {% for task in tasks %}
 
 
-            <div class="card task-card mb-3 shadow-sm">
+            <div class="card task-card mb-3 shadow-sm
+
+            {% if task[3] != 'completed' and task[4] < current_date %}
+            border_danger
+            {% endif %}
+
+            ">
 
                 <div class="card-body">
 
