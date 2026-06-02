@@ -100,6 +100,9 @@
        .dark-mode .text-secondary{
         color:#d1d1d1 !important;
        }
+      .dark-mode .text-muted{
+        color: #d1d1d1 !important;
+      }
 
     /* MOBILE RESPONSIVE */
 
@@ -197,7 +200,18 @@
                  class="form-control mb-3"
                  type="text"
                  name="title"
-                  placeholder="enter task" required>
+                 placeholder="enter task"
+                 required>
+
+            <textarea
+                class="form-control mb-3"
+                name="description"
+                rows="3"
+                placeholder="task description"
+                required></textarea>
+            
+
+
             <input
                   class="form-control mb-3"
                   type="date"
@@ -314,6 +328,25 @@
   </div>
  </div>
 
+ <div class="card main-card p-4 mb-4">
+
+    <h5 class="mb-3">
+        progress: {{ progress}}%
+    </h5>
+
+    <div class="progress" style="height: 25px;">
+
+    <div
+        class="progress-bar-striped progress-bar-animated bg-success"
+        role="progressbar"
+        style="width: {{ progress }}%;">
+
+        {{ progress }}%
+
+    </div>
+    </div>
+ </div>
+
         <hr>
 
         <h5>your tasks</h5>
@@ -321,6 +354,7 @@
         <div class="mt-4">
 
             {% for task in tasks %}
+
 
             <div class="card task-card mb-3 shadow-sm">
 
@@ -330,16 +364,25 @@
                         {{ task[1] }}
                     </h6>
 
+                    <p class="text-muted small">
+                        {{ task[2] }}
+                    </p>
+
                     <p class="card-text">
                         due_date:
-                        {{ task[3] }}
+                        {{ task[4] }}
+                    </p>
+
+                    <p class="text-muted small">
+                        created:
+                        {{ task[6] }}
                     </p>
 
                     <p>
 
                     status:
 
-                    {% if task[2] == 'completed' %}
+                    {% if task[3] == 'completed' %}            
 
                     <span class="badge bg-success">
                         COMPLETED
@@ -358,13 +401,13 @@
 
                 <p>
                     priority:
-                    {% if task[4] =='HIGH' %}
+                    {% if task[5] == 'HIGH' %}
                     <span class="badge bg-danger">
 
                         HIGH
                     </span>
 
-                    {% elif task[4] == 'MEDIUM' %}
+                    {% elif task[5] == 'MEDIUM' %}
 
                     <span class="badge bg-warning text-dark">
                         MEDIUM
@@ -381,7 +424,7 @@
 
             <p/>
 
-            {% if task[2] == 'pending' %}
+            {% if task[3] == 'pending' %}
 
             <a
  
@@ -430,6 +473,19 @@
 
         document.body.classList.toggle("dark-mode");
 
+        localStorage.setItem(
+            "darkMode",
+            document.body.classList.contains("dark-mode")
+        );
+
+        }
+
+        window.onload = function(){
+
+            if(localStorage.getItem("darkMode") === "true"){
+
+                document.body.classList.add("dark-mode");
+            }
         }
 
         </script>

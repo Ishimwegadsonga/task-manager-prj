@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request,redirect,session, flash
 import sqlite3
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -29,10 +30,12 @@ def init_db():
        CREATE TABLE IF NOT EXISTS tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
-        title TEXT,
-        status TEXT,
+        title TEXT NOT NULL,
+        description TEXT,
+        status TEXT NOT NULL,
         due_date TEXT,
-        priority  TEXT
+        priority  TEXT,
+        created_at TEXT
            ) 
 
         ''')  
@@ -146,7 +149,7 @@ def dashboard():
     if search:
 
         cursor.execute(
-            "SELECT id, title, status, due_date, priority FROM tasks WHERE user_id=? AND title LIKE ?",
+            "SELECT id, title, description, status, due_date, priority, created_at FROM tasks WHERE user_id=? AND title LIKE ?",
             (user_id, '%' + search + '%')
 
         )
@@ -154,7 +157,7 @@ def dashboard():
     elif status:
 
            cursor.execute(
-            "SELECT id, title, status, due_date,priority FROM tasks WHERE user_id=? AND status=?",
+            "SELECT id, title, description, status, due_date,priority, created_at FROM tasks WHERE user_id=? AND status=?",
             (user_id, status)
         )
 
@@ -162,19 +165,19 @@ def dashboard():
         if sort == "newest":
             
             cursor.execute(
-             "SELECT id, title, status, due_date, priority FROM tasks WHERE user_id=? ORDER BY id DESC",
+             "SELECT id, title, description, status, due_date, priority, created_at FROM tasks WHERE user_id=? ORDER BY id DESC",
             (user_id,)
         )
 
         elif sort == "oldest":
 
             cursor.execute(
-                "SELECT id, title, status, due_date, priority FROM tasks WHERE user_id=? ORDER BY id ASC",
+                "SELECT id, title, description, status, due_date, priority, created_at FROM tasks WHERE user_id=? ORDER BY id ASC",
                 (user_id,)
             )
         else:
             cursor.execute(
-                "SELECT id, title, status, due_date, priority FROM tasks WHERE user_id=?",
+                "SELECT id, title, description, status, due_date, priority, created_at FROM tasks WHERE user_id=?",
                 (user_id,)
             )
 
@@ -202,6 +205,13 @@ def dashboard():
 
     pending_tasks = cursor.fetchone()[0]
 
+    #====== progress percentage=====
+
+    if total_tasks > 0:
+        progress = int((completed_tasks / total_tasks) * 100)
+    else:
+        progress = 0
+
     conn.close()
 
 
@@ -211,7 +221,8 @@ def dashboard():
         tasks=tasks,
         total_tasks=total_tasks,
         completed_tasks=completed_tasks,
-        pending_tasks=pending_tasks
+        pending_tasks=pending_tasks,
+        progress=progress
     )
 
     #=====  add tasks  =====
@@ -222,10 +233,15 @@ def add_task():
     if not username:
         return redirect('/')
 
-    title = request.form['title']
+    title = request.form.get('title', '')
 
-    due_date = request.form['due_date']
-    priority = request.form['priority']
+    description = request.form.get('description', '')
+
+    due_date = request.form.get('due_date', '')
+
+    priority = request.form.get('priority', '')
+
+    created_at = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
@@ -239,8 +255,8 @@ def add_task():
     # insert   task====
 
     cursor.execute(
-        "INSERT INTO  tasks(user_id, title, status,due_date, priority) VALUES (?, ?, ?, ?, ?)",
-        (user_id, title, "pending", due_date, priority)
+        "INSERT INTO  tasks(user_id, title, description, status, due_date, priority, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (user_id, title, description, "pending", due_date, priority, created_at)
 
      )
 
