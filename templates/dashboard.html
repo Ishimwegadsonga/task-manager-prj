@@ -233,6 +233,23 @@
 
             </select>
 
+            <select
+                name="category"
+                class="form-select-mb3">
+
+                <option value="study">📚 Study</option>
+                <option value="work">💼 Work</option>
+                <option value="family">🏠 family</option>
+                <option value="personal">👤 Personal</option>
+                <option value="job"> 🎯job</option>
+                <option value="Hobby">🎨 Hobby</option>
+                <option value="Exercise">💪 Physical Exercise</option>
+                <option value="Music">🎵 Learn Music</option>
+                <option value="Trip">✈️ Trip</option>
+
+                
+            </select>
+
 
             <button class="btn btn-primary custom-btn px-4"
             type="submit">
@@ -384,9 +401,17 @@
                         {{ task[4] }}
                     </p>
 
+                    <p>
+                        category:
+
+                        <span class="badge bg-info">
+                        {{ task[6] }}
+                        </span>
+                    </p>
+
                     <p class="text-muted small">
                         created:
-                        {{ task[6] }}
+                        {{ task[7] }}
                     </p>
 
                     <p>
