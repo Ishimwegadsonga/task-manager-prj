@@ -237,15 +237,15 @@
                 name="category"
                 class="form-select-mb3">
 
-                <option value="study">📚 Study</option>
+                <option value="study">📚 study</option>
                 <option value="work">💼 Work</option>
                 <option value="family">🏠 family</option>
-                <option value="personal">👤 Personal</option>
+                <option value="personal">👤 personal</option>
                 <option value="job"> 🎯job</option>
-                <option value="Hobby">🎨 Hobby</option>
-                <option value="Exercise">💪 Physical Exercise</option>
-                <option value="Music">🎵 Learn Music</option>
-                <option value="Trip">✈️ Trip</option>
+                <option value="hobby">🎨 hobby</option>
+                <option value="exercise">💪 exercise</option>
+                <option value="music">🎵 music</option>
+                <option value="trip">✈️ trip</option>
 
                 
             </select>
@@ -350,6 +350,17 @@
   </div>
  </div>
 
+ <!--task analytics chart-->
+
+ <div class="card main-card p-4 mb-4">
+
+    <h5 class="mb-3">
+             📊 Task Analytics
+     </h5>
+     <canvas id="taskChart"></canvas>
+
+ </div>
+
  <div class="card main-card p-4 mb-4">
 
     <h5 class="mb-3">
@@ -403,10 +414,39 @@
 
                     <p>
                         category:
+                     
+                        {% if task[6] == 'study' %}
+                        <span class="badge bg-primary">📚 study</span>
 
-                        <span class="badge bg-info">
-                        {{ task[6] }}
-                        </span>
+                        {% elif task[6] == 'work' %}
+                        <span class="badge bg-dark">💼 work</span>
+
+                        {% elif task[6] == 'family' %}
+                        <span class="badge bg-success">🏠 family</span>
+
+                        {% elif task[6] == 'personal' %}
+                        <span class="badge bg-secondary">👤 Personal</span>
+
+                        {% elif task[6] == 'job' %}
+                        <span class="badge bg-info text-dark">🎯 job</span>
+
+                        {% elif task[6] == 'hobby' %}
+                        <span class="badge bg-warning text-dark">🎨 Hobby</span>
+
+                        {% elif task[6] == 'exercise' %}
+                        <span class="badge bg-danger">💪 exercise</span>
+
+                        {% elif task[6] == 'music' %}
+                        <span class="badge bg-primary">🎵 music</span>
+
+                        {% elif task[6] == 'trip' %}
+                        <span class="badge bg-info">✈️ trip</span>
+
+                        {% else %}
+                        <span class="badge bg-light text-dark">{{ task[6] }}</span>
+
+                        {% endif %}
+
                     </p>
 
                     <p class="text-muted small">
@@ -424,6 +464,11 @@
                         COMPLETED
                     </span>
 
+                    <p class="text-success small mt-2">
+                        completed:
+                        {{ task[8] }}
+                    </p>
+
                     {% else %}
 
                     <span class="badge bg-warning text-dark">
@@ -431,6 +476,7 @@
                         PENDING
 
                     </span>
+                    
                     {% endif %}
 
                 </p>
@@ -528,6 +574,55 @@
 
         </script>
 
+
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+   <script>
+
+    const ctx = document.getElementById('taskChart');
+
+
+    new Chart(ctx, {
+
+    type: 'bar',
+
+    data: {
+   
+
+  labels: ['completed', 'pending'],
+
+  datasets: [{
+
+    label: 'Tasks',
+
+       data: [
+
+           {{ completed_tasks }},
+           {{ pending_tasks }}
+
+      ],
+
+      backgroundColor: [
+        '#198754',
+        '#ffc107' 
+  ] 
+  
+    }]
+
+  },
+
+  options: {
+    plugins: {
+        legend: {
+            display: false
+
+        }
+    }
+}
+
+});
+
+</script>
 
     </body>
 </html>

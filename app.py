@@ -36,7 +36,8 @@ def init_db():
         due_date TEXT,
         priority TEXT,
         category TEXT,
-        created_at TEXT
+        created_at TEXT,
+        completed_at TEXT
            ) 
 
         ''')  
@@ -150,7 +151,7 @@ def dashboard():
     if search:
 
         cursor.execute(
-            "SELECT id, title, description, status, due_date, priority, category, created_at FROM tasks WHERE user_id=? AND title LIKE ?",
+            "SELECT id, title, description, status, due_date, priority, category, created_at, completed_at FROM tasks WHERE user_id=? AND title LIKE ?",
             (user_id, '%' + search + '%')
 
         )
@@ -158,7 +159,7 @@ def dashboard():
     elif status:
 
            cursor.execute(
-            "SELECT id, title, description, status, due_date, priority, category, created_at FROM tasks WHERE user_id=? AND status=?",
+            "SELECT id, title, description, status, due_date, priority, category, created_at, completed_at FROM tasks WHERE user_id=? AND status=?",
             (user_id, status)
         )
 
@@ -166,19 +167,19 @@ def dashboard():
         if sort == "newest":
             
             cursor.execute(
-             "SELECT id, title, description, status, due_date, priority, category, created_at FROM tasks WHERE user_id=? ORDER BY id DESC",
+             "SELECT id, title, description, status, due_date, priority, category, created_at, completed_at FROM tasks WHERE user_id=? ORDER BY id DESC",
             (user_id,)
         )
 
         elif sort == "oldest":
 
             cursor.execute(
-                "SELECT id, title, description, status, due_date, priority, category, created_at FROM tasks WHERE user_id=? ORDER BY id ASC",
+                "SELECT id, title, description, status, due_date, priority, category, created_at, completed_at FROM tasks WHERE user_id=? ORDER BY id ASC",
                 (user_id,)
             )
         else:
             cursor.execute(
-                "SELECT id, title, description, status, due_date, priority, category, created_at FROM tasks WHERE user_id=?",
+                "SELECT id, title, description, status, due_date, priority, category, created_at, completed_at FROM tasks WHERE user_id=?",
                 (user_id,)
             )
 
@@ -261,8 +262,8 @@ def add_task():
     # insert   task====
 
     cursor.execute(
-        "INSERT INTO  tasks(user_id, title, description, status, due_date, priority, category, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-        (user_id, title, description, "pending", due_date, priority, category, created_at)
+        "INSERT INTO  tasks(user_id, title, description, status, due_date, priority, category, created_at, completed_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (user_id, title, description, "pending", due_date, priority, category, created_at, None)
 
      )
 
@@ -359,9 +360,11 @@ def complete_task(task_id):
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
 
+    completed_at = datetime.now().strftime("%Y-%m-%d %H:%M")
+
     cursor.execute(
-        "UPDATE tasks SET status=? WHERE id=?",
-        ("completed", task_id)
+        "UPDATE tasks SET status=?, completed_at=? WHERE id=?",
+        ("completed", completed_at, task_id)
     ) 
 
     conn.commit()
