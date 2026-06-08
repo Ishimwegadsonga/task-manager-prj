@@ -86,8 +86,64 @@ def login():
     return render_template('practice.html', message="wrong username or password")
 
     
+#===============forgot password================
 
-#       register page         
+@app.route('/forgot_password')
+def forgot_password():
+
+    return render_template(
+        'forgot_password.html',
+        message=""
+    )
+
+@app.route('/reset_password', methods=['POST'])
+def reset_password():
+
+    username = request.form['username']
+    new_password = request.form['new_password']
+
+    hashed_password = generate_password_hash(
+        new_password
+    )
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM users WHERE username=?",
+        (username,)
+    )
+
+    user = cursor.fetchone()
+
+    if not user:
+
+        conn.close()
+
+        return render_template(
+            'forgot_password.html',
+            message="user not found"
+        )
+
+
+    cursor.execute(
+        "UPDATE users SET password=? WHERE username=?",
+        (hashed_password, username)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return render_template(
+        'practice.html',
+        message="password updated successfully"
+        
+    )
+
+
+
+#  ====     register page     ==== 
+   
 @app.route('/register')
 def register():
     return render_template('register.html', message="")
